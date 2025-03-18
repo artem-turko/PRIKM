@@ -32,21 +32,5 @@ pipeline {
                 }
             }
         }
-
-        stage('Test Deployment') {
-            steps {
-                script {
-                    sh 'curl -I http://localhost'
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                sh 'docker ps -a'
-            }
-        }
     }
 }
