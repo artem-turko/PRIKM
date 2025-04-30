@@ -1,35 +1,49 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_IMAGE = "artemturko/prikm"
+    }
+
     stages {
-        stage('Cleanup') {
+        stage('Start') {
+            steps {
+                echo 'Lab_2: started by GitHub'
+            }
+        }
+
+        stage('Image build') {
             steps {
                 script {
-                    sh "sudo fuser -k 80/tcp || true"
+                    sh "docker build -t prikm:latest ."
+
+                    // Створюємо 4 теги
+                    sh "docker tag prikm ${DOCKER_IMAGE}:latest"
+                    sh "docker tag prikm ${DOCKER_IMAGE}:build-${BUILD_NUMBER}"
+                    sh "docker tag prikm ${DOCKER_IMAGE}:lab2"
+                    sh "docker tag prikm ${DOCKER_IMAGE}:git-${GIT_COMMIT}"
                 }
             }
         }
 
-        stage('Checkout Code') {
+        stage('Push to registry') {
             steps {
-                git branch: 'main', url: 'https://github.com/artem-turko/PRIKM.git'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    sh 'docker build -t nginx/custom:latest .'
+                withDockerRegistry([ credentialsId: "dockerhub_token", url: "" ]) {
+                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    sh "docker push ${DOCKER_IMAGE}:build-${BUILD_NUMBER}"
+                    sh "docker push ${DOCKER_IMAGE}:lab2"
+                    sh "docker push ${DOCKER_IMAGE}:git-${GIT_COMMIT}"
                 }
             }
         }
 
-        stage('Run Container') {
+        stage('Deploy image') {
             steps {
-                script {
-                    sh 'docker stop my_nginx || true && docker rm my_nginx || true'
-                    sh 'docker run -d --name my_nginx -p 80:80 nginx/custom:latest'
-                }
+                // Видаляємо попередній контейнер, якщо існує
+                sh "docker rm -f prikm-container || true"
+
+                // Запускаємо з тегом latest
+                sh "docker run -d -p 80:80 --name prikm-container ${DOCKER_IMAGE}:latest"
             }
         }
     }
