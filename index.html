@@ -1,27 +1,46 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Lab_1</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                text-align: center;
-                background-color: #f4f4f4;
-                padding: 20px;
-            }
-            h2 {
-                color: #333;
-            }
-            p {
-                color:#5402ec;
-                font-size: 25px;
-            }
-        </style>
-    </head>
-    <body>
-        <h2>Hello from Docker, launched by Jenkins</h2>
-        <p>Student of LPNU</p>
-        <p>Turko Artem</p>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>Docker + Jenkins + GitHub</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .logos img {
+            height: 100px;
+            transition: transform 0.3s ease;
+        }
+
+        .logos img:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Hello from Docker, launched by Jenkins, triggered by GitHub</h2>
+
+    <div class="logos">
+        <img src="https://raw.githubusercontent.com/docker-library/docs/master/docker/logo.png" alt="Docker">
+        <img src="https://raw.githubusercontent.com/docker-library/docs/master/jenkins/logo.png" alt="Jenkins">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub">
+    </div>
+</body>
 </html>
